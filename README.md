@@ -5,6 +5,6 @@ Groupe 4 - Big data projet
 Hadoop + AWS + Data modeling + MongoDB  
 ----------------------------------------
 Members：
-* YU Xuanlong
-* YANG Yueming
+* Xuanlong YU
+* Yueming YANG
 * Chaymae El Abbadi
