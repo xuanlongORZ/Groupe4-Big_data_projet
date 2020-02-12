@@ -19,6 +19,12 @@ For the entire project, the tools we need to use：<br>
 * Python 3.7
 * MaongoDB
 
+## Files in this repository
+`EDA.ipynb` is for analyzing data distribution.<br>
+`data processing and modeling.ipynb` is to process and model the data, and finally obtain a baseline accuracy of 64% on total training set.<br>
+`bigdata_project_final.ipynb` is to make the prediction in addition to processing and modeling.<br>
+`big_data_project.py` is to convert file to .py format for easy execution directly via python on the instance EC2.
+
 ## Related technical documents
 * Data analysis:
 * Cloud Computing:
