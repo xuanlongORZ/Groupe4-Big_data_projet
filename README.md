@@ -26,9 +26,7 @@ For the entire project, the tools we need to use：<br>
 `big_data_project.py` is to convert file to .py format for easy execution directly via python on the instance EC2.
 
 ## Related technical documents
-* Data analysis:
-* Cloud Computing:
-* NoSQL:
+[Technical document](https://docs.google.com/document/d/1LSI3FLEaSCeHML0sj-ZJbeofFWwaZMe2/edit)
 
 # Contributors
 * Xuanlong YU
