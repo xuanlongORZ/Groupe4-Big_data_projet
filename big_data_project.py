@@ -68,6 +68,8 @@ data.drop(data[data['Medical_History_13']==2].index,axis=0,inplace=True)
 data.drop(data[data['Medical_History_40']==2].index,axis=0,inplace=True)
 data.drop(data[data['Medical_History_30']==1].index,axis=0,inplace=True)
 data.drop(data[data['InsuredInfo_3']==9].index,axis=0,inplace=True)
+data.drop(data[data['Medical_History_1']>=150].index,axis=0,inplace=True)
+data.drop(data[data['Insurance_History_2']==2].index,axis=0,inplace=True)
 data.reset_index(drop=True,inplace=True)
 
 # seperate label and features
@@ -80,24 +82,15 @@ data = data[important_features]
 
 print("Training set data processing - Done!")
 
-
-# seperate training set and validation set
-X_train, X_validation, y_train, y_validation = train_test_split(data, y_data,
-                                                                test_size=0.15, stratify=y_data,random_state=0)
-
 # xgboost model
-X_train.reset_index(drop=True,inplace=True)
-X_validation.reset_index(drop=True,inplace=True)
-y_train.reset_index(drop=True,inplace=True)
-y_validation.reset_index(drop=True,inplace=True)
 folds = 4
 seed = 0
 kf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=seed)
 models = []
-for tr_idx, val_idx in tqdm(kf.split(X_train,y_train)):
+for tr_idx, val_idx in tqdm(kf.split(data,y_data)):
     def fit_classifier(tr_idx, val_idx):
-        tr_x, tr_y = X_train[list(X_train)].iloc[tr_idx], y_train[tr_idx]
-        vl_x, vl_y = X_train[list(X_train)].iloc[val_idx], y_train[val_idx]
+        tr_x, tr_y = data[list(data)].iloc[tr_idx], y_data[tr_idx]
+        vl_x, vl_y = data[list(data)].iloc[val_idx], y_data[val_idx]
         print({'train size':len(tr_x), 'eval size':len(vl_x)})
 
         clf = xgb.XGBClassifier(n_estimators=1000,
@@ -138,20 +131,20 @@ X_test = X_test[important_features]
 X_test.reset_index(drop=True,inplace=True)
 print("Test set data processing - Done!")
 
-# prediction only use 3 xgboost models to make a hard voting
+# prediction use 4 xgboost models to make a hard voting
 res_preds = []
-for i in range(3):
+for i in range(4):
   res_preds.append(models[i+1].predict(X_test))
-
 res = []
 for i in range(len(X_test)):
   res_temp = []
-  for j in range(3):
+  for j in range(4):
     res_temp.append(res_preds[j][i])
   res.append(np.argmax(np.bincount(res_temp)))
 
 pred = pd.DataFrame(res)
 pred.rename(columns={0:"Response"},inplace=True)
 print("Prediction - done!")
-
-pred.to_csv("submission.csv",index=False)
+X_test = pd.read_csv('predict.csv')
+X_test['Response'] = pred
+X_test.to_csv("submission.csv",index=False)
